@@ -1,0 +1,91 @@
+/**
+ * Buttons Styles
+ */
+
+.button-save {
+  font-size: 18px;
+  text-decoration: none;
+  padding: 20px 40px;
+  background-color: $highlight-color;
+  text-transform: uppercase;
+  color: white;
+  @include transition(all, 0.3s);
+
+  &:hover {
+    background-color: $highlight-color-hover;
+    @include transition(all, 0.3s);
+  }
+}
+
+.button-submit-hidden {
+  display: none;
+}
+
+input[type="button"] {
+  @extend .button-save;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: 0px;
+  margin: 0px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.button-open {
+  @extend .button-save;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+
+.button-add.hidden {
+  display: none;
+}
+
+.button-add, .button-remove {
+  @extend .button-save;
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 20px;
+
+  .icon {
+    font-size: 42px;
+    overflow: hidden;
+    height: 42px;
+    width: 42px;
+  }
+}
+
+.button-remove {
+  @extend .button-save;
+  padding: 10px 20px;
+}
+
+.button-open-map-settings {
+  position: absolute;
+  top: 0px;
+  padding: 10px;
+  background-color: white;
+  right: -40px;
+  font-size: 30px;
+  border-left: none;
+}
+
+.button-update-map {
+  margin: 10px 0px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background-color: rgba(101,108,126,0.4);
+  border: none;
+  outline: none;
+  padding: 10px;
+  color: white;
+  transition: all,.3s;
+
+  &:hover {
+    color: white;
+    background-color: $highlight-color;
+  }
+}

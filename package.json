@@ -1,0 +1,22 @@
+{
+	"name": "KSFC",
+	"version": "1.0.0",
+	"description": "N/A",
+	"main": "gulp.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "KenobiSoft",
+	"license": "ISC",
+	"homepage": "http://kenobisoft.com",
+	"devDependencies": {
+		"gulp": "^3.9.1",
+		"gulp-autoprefixer": "^3.1.0",
+		"gulp-sass": "^2.3.1",
+		"gulp-concat": "^2.5.2",
+		"gulp-sourcemaps": "*",
+		"gulp-babel": "*",
+		"gulp-minify": "*",
+		"run-sequence": "*"
+	}
+}

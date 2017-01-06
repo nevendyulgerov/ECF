@@ -1,0 +1,29 @@
+/**
+ * Mixins
+ */
+
+@mixin transition($type, $speed) {
+  transition: $type, $speed;
+}
+
+/** Breakpoint min */
+@mixin breakpoint($point) {
+  @media (min-width: $point) {
+    @content;
+  }
+}
+
+/** Breakpoint max */
+@mixin breakpoint-max($point) {
+  @media (max-width: $point) {
+    @content;
+  }
+}
+
+
+/** Breakpoint height max */
+@mixin breakpoint-height-max($point) {
+  @media (max-height: $point) {
+    @content;
+  }
+}

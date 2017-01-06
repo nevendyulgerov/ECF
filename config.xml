@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+	<module>
+		<name>Enhanced Custom Fields</name>
+        <menuName>Theme Options</menuName>
+		<version>1.0.0</version>
+		<author>KenobiSoft</author>
+		<dir>ecf</dir>
+        <mode>development</mode>
+        <collection>
+            <optionGroup>sa_theme_options</optionGroup>
+            <optionName>sa_options</optionName>
+        </collection>
+		<params>
+			<page>options-page</page>
+			<update>update</update>
+		</params>
+	</module>
+</config>
