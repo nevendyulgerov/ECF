@@ -1,60 +1,182 @@
 
-#Enhanced Custom Fields - How to Use
+#Enhanced Custom Fields
 
-Enhanced Custom Fields (ECF) is an light-weight, object-oriented, configuration MVC module, designed to work in the context of WordPress.
+Enhanced Custom Fields (ECF) is an light-weight, object-oriented, configuration module, designed to work in the context of WordPress.
 This tool is designed for WordPress theme developers. With it, you can easily add all the necessary custom fields, required
 for the theme you're developing.
 
 Define your custom fields and watch them work perfectly without any extra work on your end!
 
-This module should be controlled by client programmers from a single file - config.xml. This means, that you do NOT need to write any code to use Enhanced Custom Fields. All you have to do is configure your module using xml and leave the rest to the system.
+#ECF Features
+
+With ECF, you can define a total of 13 different metafields:
+
+    - text
+    - number
+    - email
+    - checkbox
+    - date
+    - file
+    - image
+    - image gallery
+    - textarea
+    - dropdown single
+    - dropdown multiple
+    - WYSIWYG editor
+    - google map
+ 
+Any of these fields can be added to:
+
+    - custom post types
+    - theme options page with general theme settings
+
+#Configuration
+
+This module should be configured by client programmers from a single xml config file. This means, that you do NOT need to write any code to use Enhanced Custom Fields. All you have to do is configure your module using xml language and leave the rest to the system.
+
 
 #How to include Enhanced Custom Fields
 
-In order to use ECF, you need to include its index.php file (the module's entry-point) in your functions.php file.
-So, all you have to do is:
+In order to use ECF in your theme, you need to:
 
-require_once('path-to-efc/index.php');
+    - clone or download ECF and place it in your theme directory
+    - add the following code to your functions.php file:
 
-That's it! Enhanced Custom Fields is loaded and ready to use. Once you update your functions.php file, reload your back-end (wp-admin).
-You'll find ECF near the bottom of the admin menu to the left.
+```php
+/**
+ * Load module ECF
+ */
+function loadECF() {
+
+    // set base paths
+    $base      = get_stylesheet_directory();
+    
+    // set path to ECF's index.php file
+    $ecf       = $base . '/path-to-ecf/index.php';
+    
+    // set path to ECF config file
+    $ecfConfig = $base . '/ecf-config.xml';
+
+    // get module ECF
+    require_once($ecf);
+
+    // initialize ECF
+    \ECF\EnhancedCustomFields::init($ecfConfig);
+}
+
+// hook loadECF to action 'after_setup_theme'
+add_action('after_setup_theme', 'loadECF');
+```
+
+As you can see you simply need to require the index.php file of the module. Then you need to initialize ECF using the class EnhancedCustomFields and calling its only public method init(). This method accepts a single parameter - your xml config file.
+
+That's it! Enhanced Custom Fields is loaded and ready to use. Please note, that in the loadECF() function you need to modify two variables, based on your theme configuration - $ecf (the path to ecf/index.php) and $ecfConfig (the path to your ECF config file). It's up to you where you wish to place your config file. The typical approach in most cases will be to place it in your theme directory.
 
 #How to configure Enhanced Custom Fields
 
-As mentioned already, Enhanced Custom Fields can be easily configured from a single file - config.xml, found in the root folder of the module.
-Let's example config.xml and show you how to configure it according to your needs.
+As mentioned already, Enhanced Custom Fields can be easily configured from a single xml config file.
+Let's first have a look at a full-featured config file:
+
+```xml
+<?xml version="1.0"?>
+<config>
+    <themeOptions>
+
+        <settings>
+            <name>Theme Options</name>
+            <menuIcon>dashicons-list-view</menuIcon>
+        </settings>
+
+        <pages>
+            <page>
+                <name>Dashboard</name>
+                <masonry>true</masonry>
+                <showSave>false</showSave>
+                <sections>
+                    <section>
+                        <title>Activity</title>
+                        <subtitle>Activity information about posts.</subtitle>
+                        <widgets>
+                            <widget>activity</widget>
+                        </widgets>
+                    </section>
+                </sections>
+            </page>
+
+            <page>
+                <name>Settings</name>
+                <masonry>true</masonry>
+                <sections>
+                    <section>
+                        <width>3/6</width>
+                        <title>Activity</title>
+                        <subtitle>Activity information about posts.</subtitle>
+                        <metafields>
+
+                            <metafield>
+                                <type>gallery</type>
+                                <name>gallery</name>
+                                <label>Gallery Field</label>
+                                <description>This is a gallery field.</description>
+                            </metafield>
+
+                            <metafield>
+                                <type>editor</type>
+                                <name>editor</name>
+                                <label>Editor Field</label>
+                                <description>This is an editor field.</description>
+                            </metafield>
+
+                        </metafields>
+
+                    </section>
+                </sections>
+            </page>
+        </pages>
+
+    </themeOptions>
+
+    <postTypes>
+
+        <postType>
+            <name>page</name>
+            <groupName>General</groupName>
+
+            <metafields>
+
+                <metafield>
+                    <type>number</type>
+                    <name>number_field</name>
+                    <label>Number</label>
+                    <description>This is a number field.</description>
+                    <required>true</required>
+                    <size>small</size>
+                </metafield>
+
+            </metafields>
+
+        </postType>
+
+    </postTypes>
+
+</config>
+```
+
+With the above configuration, the module will create an options page with 2 sub-pages - 'Dashboard' and 'Settings'. Dashboard page will display a single widget - activity. Settings page will display two metafields - gallery and editor.
+
+This configuration will also create and attach a metafield 'number' to post type 'page'.
+
+Now, let's take a closer look at each node in the config file.
 
 First thing you'll notice, when you open config.xml is that the whole configuration is wrapped in a 'config' node. This is a must
 for the config file to work.
 
-The 'config' node contains two required nodes - 'module' and 'pages'. Let's look at 'module' first.
+The 'config' node contains several child nodes:
 
-The 'module' node contains necessary information for Enhanced Custom Fields to work. This includes:
-
-```xml
-<module>
-    <name>            - the module's name (example: Enhanced Custom Fields)
-    <version>         - the module's version (example: 1.0.0)
-    <author>          - the module's author (example: 'KenobiSoft')
-    <dir>             - the module's root folder name (example: 'efc')
-    <mode>            - the module's mode (can be 'development' or 'production')
-    <collection>      - the module's database settings
-        <optionGroup> - the group name of the module's collection setting
-        <optionName>  - the option name of the module's collection setting
-    </collection>
-    <params>          - the module's GET params
-        <page>        - the module's page param (used as an identifier for the module's pages)
-        <update>      - the module's update param (used as an identifier when an update event is triggered)
-    </params>
-    <defaultView>     - the module's default view (this view will be loaded as a fallback, when a view cannot be found and loaded)
-    <preventSave>     - prevent save for given page (you need to provide the name of the page, where you want to disable the save functionality)
-    <menuIcon>        - the module's menu icon
-</module>
-```
-
-Note that currently ECF supports writing only in the options table (native for WordPress). Due to this, the 'collection' node, in the example above, contains two sub-nodes - 'optionGroup' and 'optionName'. Developers familiar with the add_option WP API will probably recognize these. Behind the curtains, ECF interacts with this API to perform the CRUD operations for managing your custom fields.
-
-The 'pages' node contains 'page' nodes. A 'page' node contains your entire page definition. Let's look at a 'page' node:
+    - themeOptions
+    - postTypes
+    
+The node 'themeOptions' contains the declarations for an options page - a separate page in the admin panel, which can be used for general theme settings. You can define the page's title and icon in the 'settings' node. The 'pages' node contains the declarations for each sub-page of the options page. A 'page' node contains your entire page definition. Let's look at a 'page' node:
 
 ```xml
 <page>
@@ -136,52 +258,3 @@ Plain text:
 	- ribbon (info block)
 	- linkText (self-descriptive)
 	- link (self-descriptive)
-
-Finally, let's look at a full configuration:
-
-```xml
-<?xml version="1.0"?>
-<config>
-	<module>
-		<name>Enhanced Custom Fields</name>
-		<version>2.0.0</version>
-		<author>KenobiSoft</author>
-		<dir>theme_options</dir>
-        <mode>production</mode>
-        <collection>
-            <optionGroup>sa_theme_options</optionGroup>
-            <optionName>sa_options</optionName>
-        </collection>
-		<params>
-			<page>initialzr-page</page>
-			<update>update</update>
-		</params>
-        <defaultView>dashboard</defaultView>
-        <menuIcon>dashicons-list-view</menuIcon>
-	</module>
-    <pages>
-        <page>
-            <name>Dashboard</name>
-            <masonry>true</masonry>
-            <sections>
-                <section>
-                    <width>3/6</width>
-                    <title>Activity</title>
-                    <subtitle>Activity information about posts.</subtitle>
-                    <metafields>
-                        <metafield>
-                            <type>dropdown_multiple</type>
-                            <name>dropdownm1</name>
-                            <label>Taxonomy Dropdown</label>
-                            <dataType>taxonomy</dataType>
-                            <data>category</data>
-                        </metafield>
-                    </metafields>
-                </section>
-            </sections>
-        </page>
-    </pages>
-</config>
-```
-
-With the above configuration, the module will create a single page, called 'Dashboard' and fills it with just one section, with width of 50%, which contains a single metafield of type 'dropdown_multiple'. The dropdown will pull out all taxonomy items from taxonomy type 'category'.
