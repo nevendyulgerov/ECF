@@ -81,12 +81,10 @@ Let's first have a look at a full-featured config file:
 <?xml version="1.0"?>
 <config>
     <themeOptions>
-
         <settings>
             <name>Theme Options</name>
             <menuIcon>dashicons-list-view</menuIcon>
         </settings>
-
         <pages>
             <page>
                 <name>Dashboard</name>
@@ -102,7 +100,6 @@ Let's first have a look at a full-featured config file:
                     </section>
                 </sections>
             </page>
-
             <page>
                 <name>Settings</name>
                 <masonry>true</masonry>
@@ -112,38 +109,29 @@ Let's first have a look at a full-featured config file:
                         <title>Activity</title>
                         <subtitle>Activity information about posts.</subtitle>
                         <metafields>
-
                             <metafield>
                                 <type>gallery</type>
                                 <name>gallery</name>
                                 <label>Gallery Field</label>
                                 <description>This is a gallery field.</description>
                             </metafield>
-
                             <metafield>
                                 <type>editor</type>
                                 <name>editor</name>
                                 <label>Editor Field</label>
                                 <description>This is an editor field.</description>
                             </metafield>
-
                         </metafields>
-
                     </section>
                 </sections>
             </page>
         </pages>
-
     </themeOptions>
-
     <postTypes>
-
         <postType>
             <name>page</name>
             <groupName>General</groupName>
-
             <metafields>
-
                 <metafield>
                     <type>number</type>
                     <name>number_field</name>
@@ -152,13 +140,9 @@ Let's first have a look at a full-featured config file:
                     <required>true</required>
                     <size>small</size>
                 </metafield>
-
             </metafields>
-
         </postType>
-
     </postTypes>
-
 </config>
 ```
 

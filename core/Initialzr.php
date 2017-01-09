@@ -154,6 +154,7 @@ class Initialzr {
         require_once('CustomPostField.php');
         require_once('Validator.php');
         require_once('Notifier.php');
+        require_once('ECF.php');
     }
 
 
