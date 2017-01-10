@@ -13380,45 +13380,32 @@ KenobiSoft.metafields = KenobiSoft.metafields || {};
 KenobiSoft.metafields.default = KenobiSoft.metafields.default || function ($component) {
 
     // define local vars
-    var $ = jQuery;
+    var $ = jQuery,
+        $pluginView = $('.plugin-view'),
+        $navElements = $pluginView.find('.nav-element'),
+        $btnSave = $pluginView.find('.button-save'),
+        $hiddenSave = $pluginView.find('.button-submit-hidden');
 
     // save event: submit plugin form
-    $('.button-save').on('click', function (e) {
+    $btnSave.on('click', function (e) {
         e.preventDefault();
 
         // submit plugin form
-        $('.button-submit-hidden').click();
+        $hiddenSave.click();
     });
 
     // redirect event: redirect to page on navigation click
-    $('.nav-element').on('click', function (e) {
+    $navElements.on('click', function (e) {
         window.location.href = $(this).find('a').attr('href');
     });
 
-    /*
-    // check checkbox on label click
-    $('label').on('click', function(e) {
-        $(this).find('input[type="checkbox"]').trigger('click');
-    });
-    */
-
     // highlight wysiwyg on click
-    $('.ksfc-metafield[data-metafield="wysiwyg"]').on('click', function () {
+    $('.custom-metafield[data-metafield="editor"]').on('click', function () {
         var $box = $(this).find('.trumbowyg-box');
 
         if (!$box.hasClass('active')) {
             $box.addClass('active');
-
             $('.trumbowyg-box').not($box).removeClass('active');
-        }
-    });
-
-    // remove wysiwyg highlight
-    $('.ksfc-metafield').on('click', function (e) {
-        var $metafield = $(this);
-
-        if ($metafield.attr('data-metafield') !== 'wysiwyg') {
-            $('.trumbowyg-box').length > 0 && $('.trumbowyg-box').removeClass('active');
         }
     });
 };
@@ -13847,26 +13834,6 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function ($componen
                 $buttonOpen.removeClass('hidden');
                 $metafieldImg.removeClass('hidden');
             });
-
-            /*
-            // Runs on media open
-            meta_image_frame.on('open', function() {
-                setTimeout(function() {
-                    var selection = meta_image_frame.state().get('selection');
-                    var $allImages = $('.attachments li');
-                      for (var i = 0, j = $allImages.length; i < j; i++) {
-                        var $img     = $allImages.eq(i);
-                        var id       = $img.find('img').attr('src');
-                        var cleanUrl = id.replace(/-\d+x\d+((\.png)|(\.jpg)|(\.gif)|(\.tif))/g, '');
-                          if ( selectedImgId && selectedImgId.indexOf(cleanUrl) !== -1 && !$img.hasClass('selected') ) {
-                            $img.addClass('selected');
-                            selection.add(wp.media.attachment(selectedImgId));
-                            break;
-                        }
-                    }
-                }, 500);
-            });
-            */
 
             // Opens the media library frame.
             meta_image_frame.open();

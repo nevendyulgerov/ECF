@@ -67,28 +67,6 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function($component
                 $metafieldImg.removeClass('hidden');
             });
 
-            /*
-            // Runs on media open
-            meta_image_frame.on('open', function() {
-                setTimeout(function() {
-                    var selection = meta_image_frame.state().get('selection');
-                    var $allImages = $('.attachments li');
-
-                    for (var i = 0, j = $allImages.length; i < j; i++) {
-                        var $img     = $allImages.eq(i);
-                        var id       = $img.find('img').attr('src');
-                        var cleanUrl = id.replace(/-\d+x\d+((\.png)|(\.jpg)|(\.gif)|(\.tif))/g, '');
-
-                        if ( selectedImgId && selectedImgId.indexOf(cleanUrl) !== -1 && !$img.hasClass('selected') ) {
-                            $img.addClass('selected');
-                            selection.add(wp.media.attachment(selectedImgId));
-                            break;
-                        }
-                    }
-                }, 500);
-            });
-            */
-
             // Opens the media library frame.
             meta_image_frame.open();
         });

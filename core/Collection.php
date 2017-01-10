@@ -116,7 +116,7 @@ class Collection {
      * @param $postId
      * @param $metafields
      */
-    public static function savePostCustomFields($postId, $metafields) {
+    public static function savePostCustomFields($postId, $metafields = array()) {
 
         if ( count($metafields) > 0 ) {
 
@@ -145,7 +145,7 @@ class Collection {
      * @param $taxName
      * @param $metafields
      */
-    public static function saveTaxCustomFields($termId, $taxName, $metafields) {
+    public static function saveTaxCustomFields($termId, $taxName, $metafields = array()) {
 
         if ( isset( $_POST[$taxName] ) ) {
             $termMeta = get_option("taxonomy_$termId");

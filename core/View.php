@@ -123,7 +123,7 @@ class View {
                     <!-- navigation -->
                     <ul class="navigation">
                         <?php foreach ($pages as $index => $page) : ?>
-                            <li class="nav-element<?php echo $page_index == $index ? ' active' : ''; ?>">
+                            <li class="nav-element <?php echo $page_index == $index ? 'active' : ''; ?>">
                                 <div class="view-nav-element">
                                     <a href="<?php echo $url . '&' . self::$moduleConfig['module']['params']['page'] . '=' . $index; ?>" class="view-button-nav" data-index="<?php echo $index; ?>"><?php echo ucfirst($page['name']); ?></a>
                                 </div>
@@ -157,10 +157,35 @@ class View {
         $data     = $this->getPageData($page);
         $sections = $this->getData('section', $data['sections']);
         $masonry  = isset($data['masonry']) && $data['masonry'] === 'true';
+
+
+        $pages = self::$fieldsConfig['themeOptions']['pages'];
+        $hasMultiplePages = $pages['page']['name'] === null;
+
+        if ( $hasMultiplePages ) {
+            $pages = $pages['page'];
+        }
+
+        $showSave = true;
+
+        foreach ( $pages as $pageNode ) {
+            if ( strtolower($pageNode['name']) === $page && isset($pageNode['showSave']) && $pageNode['showSave'] === 'false') {
+                $showSave = false;
+                break;
+            }
+        }
         ?>
 
         <!-- main -->
         <div class="view-main" id="initialzr-main-wrapper">
+
+            <?php if ( $showSave ) : ?>
+
+                <div class="buttons-group">
+                    <a href="#" class="button-save" title="<?php echo __('Click to save your data'); ?>"><?php echo __('Save'); ?></a>
+                </div>
+
+            <?php endif; ?>
 
             <!-- view-page -->
             <div class="view-page" data-view-page="<?php echo $this->getCurrentPage(); ?>">
@@ -323,21 +348,6 @@ class View {
      * Load footer
      */
     protected function loadFooter() {
-        $pageName = $this->getCurrentPage();
-        $pages = self::$fieldsConfig['themeOptions']['pages'];
-        $hasMultiplePages = $pages['page']['name'] === null;
-
-        if ( $hasMultiplePages ) {
-            $pages = $pages['page'];
-        }
-
-        $showSave = true;
-
-        foreach ( $pages as $page ) {
-            if ( strtolower($page['name']) === $pageName && isset($page['showSave']) && $page['showSave'] === 'false') {
-                $showSave = false;
-            }
-        }
         ?>
 
         <!-- footer -->
@@ -345,14 +355,6 @@ class View {
 
             <div class="view-page-part" data-view-page-part="footer">
                 <div class="footer-controls">
-
-                    <?php if ( $showSave ) : ?>
-
-                        <div class="buttons-group">
-                            <a href="#" class="button-save" title="<?php echo __('Click to save your data'); ?>"><?php echo __('Save'); ?></a>
-                        </div>
-
-                    <?php endif; ?>
 
                 </div>
             </div>
@@ -623,21 +625,18 @@ class View {
     protected function createDataFields() {
 
         // Get module data
-        $data = $this->collection->getAll();
+        $collection = $this->collection->getAll();
+        $data       = is_array($collection) ? $collection : array();
         $optionName = self::$moduleConfig['module']['collection']['optionName'];
 
-        if ( ! is_array($data) ) {
-            $data = array();
-        }
-
         // Iterate over all fields
-        foreach ($data as $name => $value) {
+        foreach ( $data as $name => $value ) {
 
             // Create hidden input
             Metafield::createField(array(
                 'type'        => 'hidden',
                 'name'        => $name,
-                'value'       => $value,
+                'value'       => stripslashes($value),
                 'option_name' => $optionName
             ));
         }

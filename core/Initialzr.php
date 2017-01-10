@@ -47,15 +47,20 @@ class Initialzr {
 
 
     /**
-     * @property null $customPostField
+     * @property CustomPostField $customPostField
      */
     protected $customPostField   = null;
 
 
     /**
-     * @property null $taxField
+     * @property customTaxField $taxField
      */
-    protected $taxField          = null;
+    protected $customTaxField          = null;
+
+
+    protected $messages          = array(
+        'invalid_init' => 'Invalid initialization for ECF! Make sure to provide a valid config xml file at initialization.'
+    );
 
 
     /**
@@ -86,7 +91,7 @@ class Initialzr {
         // validate
         $isValid = Validator::validate($args, 'config');
         if ( ! $isValid ) {
-            Notifier::notify('Invalid initialization for ECF! Make sure to provide a valid config xml file at initialization.');
+            Notifier::notify($this->messages['invalid_int']);
             return;
         }
 
@@ -94,6 +99,7 @@ class Initialzr {
         $moduleConfig = $args['module_config'];
         $fieldsConfig = $args['fields_config'];
 
+        // init properties
         $this->helper 	       = new Helper();
         $this->moduleConfig    = $this->helper->xmlToArr($moduleConfig);
         $this->fieldsConfig    = $this->helper->xmlToArr($fieldsConfig);
@@ -101,8 +107,9 @@ class Initialzr {
         $this->view   	       = new View($this->moduleConfig, $this->fieldsConfig);
         self::$collection      = new Collection($this->moduleConfig['module']['collection']);
         $this->customPostField = new CustomPostField($this->fieldsConfig['postTypes']);
-        $this->taxField        = new TaxField($this->fieldsConfig['taxonomies']);
+        $this->customTaxField  = new CustomTaxField($this->fieldsConfig['taxonomies']);
 
+        // setup app and monitor for changes
         $this->setup();
         $this->monitor();
     }
@@ -137,7 +144,15 @@ class Initialzr {
             wp_localize_script($module['dir'], 'ECF_Settings', array(
                 'site_url' => get_site_url()
             ));
-            wp_enqueue_script($module['dir'] . '_googleMaps', 'http://maps.googleapis.com/maps/api/js?sensor=false');
+
+            // get google maps script url
+            $googleMapsApiKey = $this->fieldsConfig['googleMapsApiKey'];
+            $googleMapsScriptUrl =
+                is_string($googleMapsApiKey) && !empty($googleMapsApiKey) ?
+                    'https://maps.googleapis.com/maps/api/js?key=' . $googleMapsApiKey : 'http://maps.googleapis.com/maps/api/js?sensor=false';
+
+            // enqueue google maps script
+            wp_enqueue_script($module['dir'] . '_googleMaps', $googleMapsScriptUrl);
         });
 
         // add custom metafields to post types
@@ -151,65 +166,10 @@ class Initialzr {
         });
 
         // add custom metafields to taxonomy
-        $this->addTaxonomyFields();
+        $this->customTaxField->addTaxonomyFields();
 
         // save custom metafields for taxonomy
-        $this->saveTaxonomyFields();
-    }
-
-
-    /**
-     * Add taxonomy fields
-     */
-    protected function addTaxonomyFields() {
-        $taxonomies = $this->getTaxonomies();
-
-        if ( count($taxonomies) > 0 ) {
-            foreach( $taxonomies as $tax ) {
-                $taxName    = $tax['name'];
-                $metafields = $tax['metafields'];
-
-                add_action($taxName . '_edit_form_fields', function($term) use ($taxName, $metafields) {
-                    $this->taxField->addCustomMetafields($term, $taxName, $metafields);
-                });
-            }
-        }
-    }
-
-
-    /**
-     * save taxonomy fields
-     */
-    protected function saveTaxonomyFields() {
-        $taxonomies = $this->getTaxonomies();
-
-        if ( count($taxonomies) > 0 ) {
-            foreach( $taxonomies as $tax ) {
-                $taxName    = $tax['name'];
-                $metafields = $tax['metafields'];
-
-                add_action('edited_' . $taxName, function($termId) use ($taxName, $metafields) {
-                    $this->taxField->saveCustomFields($termId, $taxName, $metafields);
-                });
-            }
-        }
-    }
-
-
-    /**
-     * Get taxonomies
-     * @return array
-     */
-    protected function getTaxonomies() {
-        $taxonomies      = $this->fieldsConfig['taxonomies'];
-        $taxArr          = $taxonomies['taxonomy'];
-        $hasMultipleTaxs = $taxArr['name'] === null;
-
-        if ( ! $hasMultipleTaxs ) {
-            $taxArr = array($taxonomies['taxonomy']);
-        }
-
-        return $taxArr;
+        $this->customTaxField->saveTaxonomyFields();
     }
 
 
@@ -223,7 +183,7 @@ class Initialzr {
         require_once('Metafield.php');
         require_once('Collection.php');
         require_once('CustomPostField.php');
-        require_once('TaxField.php');
+        require_once('CustomTaxField.php');
         require_once('Validator.php');
         require_once('Notifier.php');
         require_once('ECF.php');

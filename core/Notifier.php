@@ -16,7 +16,7 @@ class Notifier {
      * @param $message
      */
     public static function notify($message) {
-        $style = 'style="color: #a94442;background-color: #f2dede;padding: 20px;margin: 20px 0px;"';
+        $style = 'style="color: #a94442;background-color: #f2dede;padding: 20px;margin: 20px auto"';
 
         $html =
             '<div ' . $style . '>' .

@@ -13,47 +13,32 @@ KenobiSoft.metafields = KenobiSoft.metafields || {};
 KenobiSoft.metafields.default = KenobiSoft.metafields.default || function($component) {
 
     // define local vars
-    var $ = jQuery;
+    var $ = jQuery,
+        $pluginView  = $('.plugin-view'),
+        $navElements = $pluginView.find('.nav-element'),
+        $btnSave     = $pluginView.find('.button-save'),
+        $hiddenSave  = $pluginView.find('.button-submit-hidden');
 
     // save event: submit plugin form
-    $('.button-save').on('click', function(e) {
+    $btnSave.on('click', function(e) {
         e.preventDefault();
 
         // submit plugin form
-        $('.button-submit-hidden').click();
+        $hiddenSave.click();
     });
 
-
     // redirect event: redirect to page on navigation click
-    $('.nav-element').on('click', function(e) {
+    $navElements.on('click', function(e) {
         window.location.href = $(this).find('a').attr('href');
     });
 
-    /*
-    // check checkbox on label click
-    $('label').on('click', function(e) {
-        $(this).find('input[type="checkbox"]').trigger('click');
-    });
-    */
-
     // highlight wysiwyg on click
-    $('.ksfc-metafield[data-metafield="wysiwyg"]').on('click', function() {
+    $('.custom-metafield[data-metafield="editor"]').on('click', function() {
         var $box = $(this).find('.trumbowyg-box');
 
         if ( ! $box.hasClass('active') ) {
             $box.addClass('active');
-
             $('.trumbowyg-box').not($box).removeClass('active');
-        }
-    });
-
-
-    // remove wysiwyg highlight
-    $('.ksfc-metafield').on('click', function(e) {
-        var $metafield = $(this);
-
-        if ( $metafield.attr('data-metafield') !== 'wysiwyg' ) {
-            $('.trumbowyg-box').length > 0 && $('.trumbowyg-box').removeClass('active');
         }
     });
 };

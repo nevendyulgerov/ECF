@@ -642,7 +642,7 @@ class Metafield {
      * @param $value
      * @return string
      */
-    protected static function sanitizeValue($value) {
+    public static function sanitizeValue($value) {
         if ( is_array($value) ) {
             return self::sanitizeValues($value);
         } else {
