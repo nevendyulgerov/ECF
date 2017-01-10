@@ -112,6 +112,29 @@ class Collection {
 
 
     /**
+     * Get custom post field
+     * @param $field
+     * @param $postId
+     * @return mixed
+     */
+    public static function getCustomPostField($field, $postId) {
+        return get_post_meta($postId, $field, true);
+    }
+
+
+    /**
+     * Get custom taxonomy field
+     * @param $field
+     * @param $termId
+     * @return mixed
+     */
+    public static function getCustomTaxField($field, $termId) {
+        $termMeta = get_option("taxonomy_$termId");
+        return $termMeta[$field];
+    }
+
+
+    /**
      * Save post custom fields
      * @param $postId
      * @param $metafields

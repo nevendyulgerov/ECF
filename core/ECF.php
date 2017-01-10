@@ -13,10 +13,38 @@ class ECF {
 
     /**
      * Get field
-     * @param $field
+     * @param $args
      * @return null
      */
-    public static function get($field) {
+    public static function get($args) {
+        $fieldData = null;
+        $field = $args['field'];
+        $type  = $args['type'];
+
+        switch ( $type ) {
+            case 'opt':
+                $fieldData = self::getOptionField($field);
+                break;
+            case 'cpt':
+                $fieldData = self::getCptField($field, $args['post_id']);
+                break;
+            case 'tax':
+                $fieldData = self::getTaxField($field, $args['term_id']);
+                break;
+            default:
+                break;
+        }
+
+        return $fieldData;
+    }
+
+
+    /**
+     * Get option field
+     * @param $field
+     * @return string
+     */
+    protected static function getOptionField($field) {
         $fields = self::getFields();
         $property     = null;
 
@@ -25,6 +53,28 @@ class ECF {
         }
 
         return self::sanitizeField($property);
+    }
+
+
+    /**
+     * Get CPT field
+     * @param $field
+     * @param $postId
+     * @return mixed
+     */
+    protected static function getCptField($field, $postId) {
+        return Collection::getCustomPostField($field, $postId);
+    }
+
+
+    /**
+     * Get taxonomy field
+     * @param $field
+     * @param $termId
+     * @return mixed
+     */
+    protected static function getTaxField($field, $termId) {
+        return Collection::getCustomTaxField($field, $termId);
     }
 
 
@@ -80,8 +130,8 @@ class ECF {
         $sanitizedFields = array();
 
         if ( is_array($fields) && count($fields) > 0 ) {
-            foreach ( $fields as $field ) {
-                array_push($sanitizedFields, self::sanitizeField($field));
+            foreach ( $fields as $key => $field ) {
+                $sanitizedFields[$key] = self::sanitizeField($field);
             }
         }
 

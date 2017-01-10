@@ -177,16 +177,16 @@ class Initialzr {
      * Get dependencies
      */
     protected function getDependencies() {
-        require_once('View.php');
-        require_once('Widget.php');
-        require_once('Helper.php');
-        require_once('Metafield.php');
         require_once('Collection.php');
         require_once('CustomPostField.php');
         require_once('CustomTaxField.php');
-        require_once('Validator.php');
-        require_once('Notifier.php');
         require_once('ECF.php');
+        require_once('Helper.php');
+        require_once('Metafield.php');
+        require_once('Notifier.php');
+        require_once('Validator.php');
+        require_once('View.php');
+        require_once('Widget.php');
     }
 
 
