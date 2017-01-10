@@ -17,11 +17,19 @@ class CustomTaxField {
 
 
     /**
+     * @property null
+     */
+    protected $moduleConfig = null;
+
+
+    /**
      * Construct
+     * @param $moduleConfig
      * @param $config
      */
-    public function __construct($config) {
-        $this->config = $config;
+    public function __construct($moduleConfig, $config) {
+        $this->moduleConfig = $moduleConfig;
+        $this->config       = $config;
     }
 
 
@@ -105,6 +113,9 @@ class CustomTaxField {
                         // update field name
                         $metafield['name'] = $taxName . '[' . $metafield['name'] . ']';
 
+                        // set module data
+                        $metafield['module'] = (array) $this->moduleConfig->module;
+
                         // create custom metafield
                         $this->createCustomMetafield($metafield);
                     }
@@ -115,6 +126,9 @@ class CustomTaxField {
 
                     // update field name
                     $metafield['name'] = $taxName . '[' . $metafield['name'] . ']';
+
+                    // set module data
+                    $metafield['module'] = (array) $this->moduleConfig->module;
 
                     // create custom metafield
                     $this->createCustomMetafield($metafield);

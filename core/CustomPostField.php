@@ -17,11 +17,19 @@ class CustomPostField {
 
 
     /**
+     * @property null
+     */
+    protected $moduleConfig = null;
+
+
+    /**
      * Construct
+     * @param $moduleConfig
      * @param $config
      */
-    public function __construct($config) {
-        $this->config = $config;
+    public function __construct($moduleConfig, $config) {
+        $this->config       = $config;
+        $this->moduleConfig = $moduleConfig;
     }
 
 
@@ -111,8 +119,12 @@ class CustomPostField {
                 if ( isset($metafieldName) && !empty($metafieldName) ) {
 
                     // set metafield value
-                    $metafield['value'] = get_post_meta($postId, $metafieldName, true);
+                    $metafield['value']  = get_post_meta($postId, $metafieldName, true);
 
+                    // set module data
+                    $metafield['module'] = (array) $this->moduleConfig->module;
+
+                    // create field
                     Metafield::createField($metafield);
 
                 } else {
@@ -126,6 +138,10 @@ class CustomPostField {
                             // set metafield value
                             $actualMetafield['value'] = get_post_meta($postId, $actualMetafieldName, true);
 
+                            // set module data
+                            $actualMetafield['module'] = (array) $this->moduleConfig->module;
+
+                            // create field
                             Metafield::createField($actualMetafield);
                         }
 

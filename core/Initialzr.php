@@ -106,8 +106,8 @@ class Initialzr {
 
         $this->view   	       = new View($this->moduleConfig, $this->fieldsConfig);
         self::$collection      = new Collection($this->moduleConfig['module']['collection']);
-        $this->customPostField = new CustomPostField($this->fieldsConfig['postTypes']);
-        $this->customTaxField  = new CustomTaxField($this->fieldsConfig['taxonomies']);
+        $this->customPostField = new CustomPostField($moduleConfig, $this->fieldsConfig['postTypes']);
+        $this->customTaxField  = new CustomTaxField($moduleConfig, $this->fieldsConfig['taxonomies']);
 
         // setup app and monitor for changes
         $this->setup();
