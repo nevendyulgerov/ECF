@@ -20,7 +20,8 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function($component
         $buttonRemove = $component.find('.button-remove'),
         $metafield    = $component.find('textarea'),
         $metafieldImg = $component.find('img'),
-        selectedImgId = null;
+        selectedImgId = null,
+        settings      = ECF_Settings;
 
     var init = function() {
         $buttonAdd.on('click', function(e) {
@@ -44,10 +45,13 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function($component
                 // get media file and create json representation of the data
                 var media_attachment = meta_image_frame.state().get('selection').first().toJSON();
 
+                var imageUrl     = media_attachment.url;
+                var relativePath = imageUrl.replace(settings.site_url, '');
+
                 // store meaningful data
                 var imageObj = {
                     id: media_attachment.id,
-                    url: media_attachment.url
+                    url: relativePath
                 };
 
                 selectedImgId = imageObj.id;

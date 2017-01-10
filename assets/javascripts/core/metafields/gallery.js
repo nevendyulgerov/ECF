@@ -20,7 +20,8 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         $valStorage     = $component.find('textarea'),
         $btnAddImg      = $component.find('.button-add'),
         $galleryImg     = $component.find('.gallery-image-wrapper'),
-        sly             = null;
+        sly             = null,
+        settings      = ECF_Settings;
 
     var init = function() {
 
@@ -157,13 +158,16 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
 
         // Get image data
         var data = meta_image_frame.state().get('selection').toJSON();
-
         var urls = [];
 
-        for (i in data) {
+        for (var i in data) {
+            var image        = data[i];
+            var imageUrl     = image.url;
+            var relativePath = imageUrl.replace(settings.site_url, '');
+
             urls.push({
-                id: data[i].id,
-                url: data[i].url
+                id: image.id,
+                url: relativePath
             });
         }
 

@@ -13255,10 +13255,6 @@ KenobiSoft.manager = KenobiSoft.manager || function ($) {
 
                 // call component
                 components[component]($component);
-            } else if (!isValid) {
-                // component not found or invalid
-                // warn the user with a message
-                console.warn('Component [' + component + '] not found. Make sure to define the component before calling it.');
             }
         }
 
@@ -13489,7 +13485,8 @@ KenobiSoft.metafields.file = KenobiSoft.metafields.file || function ($component)
         $buttonOpen = $component.find('.button-open'),
         $buttonAdd = $component.find('.button-add'),
         $buttonRemove = $component.find('.button-remove'),
-        $metafield = $component.find('textarea');
+        $metafield = $component.find('textarea'),
+        settings = ECF_Settings;
 
     var init = function () {
         $buttonAdd.on('click', function (e) {
@@ -13513,10 +13510,13 @@ KenobiSoft.metafields.file = KenobiSoft.metafields.file || function ($component)
                 // get media file and create json representation of the data
                 var media_attachment = meta_image_frame.state().get('selection').first().toJSON();
 
+                var imageUrl = media_attachment.url;
+                var relativePath = imageUrl.replace(settings.site_url, '');
+
                 // store meaningful data
                 var imageObj = {
                     id: media_attachment.id,
-                    url: media_attachment.url
+                    url: relativePath
                 };
 
                 // store data in metafield
@@ -13566,7 +13566,8 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function ($comp
         $valStorage = $component.find('textarea'),
         $btnAddImg = $component.find('.button-add'),
         $galleryImg = $component.find('.gallery-image-wrapper'),
-        sly = null;
+        sly = null,
+        settings = ECF_Settings;
 
     var init = function () {
 
@@ -13703,13 +13704,16 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function ($comp
 
         // Get image data
         var data = meta_image_frame.state().get('selection').toJSON();
-
         var urls = [];
 
-        for (i in data) {
+        for (var i in data) {
+            var image = data[i];
+            var imageUrl = image.url;
+            var relativePath = imageUrl.replace(settings.site_url, '');
+
             urls.push({
-                id: data[i].id,
-                url: data[i].url
+                id: image.id,
+                url: relativePath
             });
         }
 
@@ -13797,7 +13801,8 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function ($componen
         $buttonRemove = $component.find('.button-remove'),
         $metafield = $component.find('textarea'),
         $metafieldImg = $component.find('img'),
-        selectedImgId = null;
+        selectedImgId = null,
+        settings = ECF_Settings;
 
     var init = function () {
         $buttonAdd.on('click', function (e) {
@@ -13821,10 +13826,13 @@ KenobiSoft.metafields.image = KenobiSoft.metafields.image || function ($componen
                 // get media file and create json representation of the data
                 var media_attachment = meta_image_frame.state().get('selection').first().toJSON();
 
+                var imageUrl = media_attachment.url;
+                var relativePath = imageUrl.replace(settings.site_url, '');
+
                 // store meaningful data
                 var imageObj = {
                     id: media_attachment.id,
-                    url: media_attachment.url
+                    url: relativePath
                 };
 
                 selectedImgId = imageObj.id;

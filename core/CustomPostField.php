@@ -113,8 +113,6 @@ class CustomPostField {
                     // set metafield value
                     $metafield['value'] = get_post_meta($postId, $metafieldName, true);
 
-                    // use the class Metafield, as an internal
-                    // worker to create the field
                     Metafield::createField($metafield);
 
                 } else {
@@ -128,8 +126,6 @@ class CustomPostField {
                             // set metafield value
                             $actualMetafield['value'] = get_post_meta($postId, $actualMetafieldName, true);
 
-                            // use the class Metafield, as an internal
-                            // worker to create the field
                             Metafield::createField($actualMetafield);
                         }
 
@@ -205,9 +201,6 @@ class CustomPostField {
         $isValidSave = $pagenow == 'post.php' && current_user_can('edit_posts', $postId);
 
         if ( $isValidSave ) {
-
-            // use the class Collection, as an internal
-            // worker to save the field
             Collection::savePostCustomFields($postId, $metafields);
         }
     }

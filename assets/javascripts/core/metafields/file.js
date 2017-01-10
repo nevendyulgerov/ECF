@@ -17,7 +17,8 @@ KenobiSoft.metafields.file = KenobiSoft.metafields.file || function($component) 
         $buttonOpen   = $component.find('.button-open'),
         $buttonAdd    = $component.find('.button-add'),
         $buttonRemove = $component.find('.button-remove'),
-        $metafield    = $component.find('textarea');
+        $metafield    = $component.find('textarea'),
+        settings      = ECF_Settings;
 
     var init = function() {
         $buttonAdd.on('click', function(e) {
@@ -41,10 +42,13 @@ KenobiSoft.metafields.file = KenobiSoft.metafields.file || function($component) 
                 // get media file and create json representation of the data
                 var media_attachment = meta_image_frame.state().get('selection').first().toJSON();
 
+                var imageUrl     = media_attachment.url;
+                var relativePath = imageUrl.replace(settings.site_url, '');
+
                 // store meaningful data
                 var imageObj = {
                     id: media_attachment.id,
-                    url: media_attachment.url
+                    url: relativePath
                 };
 
                 // store data in metafield

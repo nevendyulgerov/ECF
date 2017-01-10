@@ -624,18 +624,18 @@ class View {
 
         // Get module data
         $data = $this->collection->getAll();
+        $optionName = self::$moduleConfig['module']['collection']['optionName'];
 
         if ( ! is_array($data) ) {
             $data = array();
         }
 
-        // Iterate over all setting fields
+        // Iterate over all fields
         foreach ($data as $name => $value) {
-            $optionName = self::$moduleConfig['module']['collection']['optionName'];
 
             // Create hidden input
             Metafield::createField(array(
-                'type'        => 'input_hidden',
+                'type'        => 'hidden',
                 'name'        => $name,
                 'value'       => $value,
                 'option_name' => $optionName
