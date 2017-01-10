@@ -53,6 +53,12 @@ class Initialzr {
 
 
     /**
+     * @property null $taxField
+     */
+    protected $taxField          = null;
+
+
+    /**
      * Get instance of the class
      * @param $config
      * @return mixed
@@ -77,8 +83,8 @@ class Initialzr {
         // get dependencies
         $this->getDependencies();
 
+        // validate
         $isValid = Validator::validate($args, 'config');
-
         if ( ! $isValid ) {
             Notifier::notify('Invalid initialization for ECF! Make sure to provide a valid config xml file at initialization.');
             return;
@@ -95,6 +101,7 @@ class Initialzr {
         $this->view   	       = new View($this->moduleConfig, $this->fieldsConfig);
         self::$collection      = new Collection($this->moduleConfig['module']['collection']);
         $this->customPostField = new CustomPostField($this->fieldsConfig['postTypes']);
+        $this->taxField        = new TaxField($this->fieldsConfig['taxonomies']);
 
         $this->setup();
         $this->monitor();
@@ -139,6 +146,67 @@ class Initialzr {
         add_action('save_post', function() {
             $this->customPostField->saveCustomFields($this->fieldsConfig['postTypes']);
         });
+
+        // add custom metafields to taxonomy
+        $this->addTaxonomyFields();
+
+        // save custom metafields for taxonomy
+        $this->saveTaxonomyFields();
+    }
+
+
+    /**
+     * Add taxonomy fields
+     */
+    protected function addTaxonomyFields() {
+        $taxonomies = $this->getTaxonomies();
+
+        if ( count($taxonomies) > 0 ) {
+            foreach( $taxonomies as $tax ) {
+                $taxName    = $tax['name'];
+                $metafields = $tax['metafields'];
+
+                add_action($taxName . '_edit_form_fields', function($term) use ($taxName, $metafields) {
+                    $this->taxField->addCustomMetafields($term, $taxName, $metafields);
+                });
+            }
+        }
+    }
+
+
+    /**
+     * save taxonomy fields
+     */
+    protected function saveTaxonomyFields() {
+        $taxonomies = $this->getTaxonomies();
+
+        if ( count($taxonomies) > 0 ) {
+            foreach( $taxonomies as $tax ) {
+                $taxName    = $tax['name'];
+                $metafields = $tax['metafields'];
+
+                add_action('edited_' . $taxName, function($termId) use ($taxName, $metafields) {
+                    $this->taxField->saveCustomFields($termId, $taxName, $metafields);
+                });
+            }
+        }
+    }
+
+
+    /**
+     * Get taxonomies
+     * @return array
+     */
+    protected function getTaxonomies() {
+        $taxonomies      = $this->fieldsConfig['taxonomies'];
+        $taxArr          = $taxonomies['taxonomy'];
+        $hasMultipleTaxs = $taxArr['name'] === null;
+
+        if ( ! $hasMultipleTaxs ) {
+            $taxArr = array($taxonomies['taxonomy']);
+        }
+
+        return $taxArr;
     }
 
 
@@ -152,6 +220,7 @@ class Initialzr {
         require_once('Metafield.php');
         require_once('Collection.php');
         require_once('CustomPostField.php');
+        require_once('TaxField.php');
         require_once('Validator.php');
         require_once('Notifier.php');
         require_once('ECF.php');

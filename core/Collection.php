@@ -137,4 +137,27 @@ class Collection {
             }
         }
     }
+
+
+    /**
+     * Save taxonomy custom fields
+     * @param $termId
+     * @param $taxName
+     * @param $metafields
+     */
+    public static function saveTaxCustomFields($termId, $taxName, $metafields) {
+
+        if ( isset( $_POST[$taxName] ) ) {
+            $termMeta = get_option("taxonomy_$termId");
+            $catKeys  = array_keys($_POST[$taxName]);
+
+            foreach ( $catKeys as $key ){
+                if (isset($_POST[$taxName][$key])){
+                    $termMeta[$key] = $_POST[$taxName][$key];
+                }
+            }
+
+            update_option("taxonomy_$termId", $termMeta);
+        }
+    }
 }

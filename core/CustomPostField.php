@@ -33,7 +33,6 @@ class CustomPostField {
         global $post;
         $postType   = get_post_type($post->ID);
 
-
         if ( is_array($metafieldsData) && count($metafieldsData) > 0 ) {
 
             foreach ( $metafieldsData as $metafieldsArr ) {
