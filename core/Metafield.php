@@ -515,7 +515,7 @@ class Metafield {
                 <a href="#" class="button-update-map" title="<?php echo __('Press to update the map') ?>"><?php echo __('Update the map'); ?></a>
             </div>
 
-            <textarea class="textarea-hidden" name="<?php echo $fieldName; ?>" id="<?php echo $name; ?>"><?php echo $rawValues; ?></textarea>
+            <textarea class="textarea-hidden" name="<?php echo $fieldName; ?>" ><?php echo $rawValues; ?></textarea>
 
             <div id="<?php echo $fieldName; ?>" class="metafield" style="<?php echo $height; ?>"></div>
 
