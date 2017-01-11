@@ -599,6 +599,7 @@ class Metafield {
         $name        = $args['name'];
         $value       = stripslashes($args['value']);
         $values      = json_decode($value);
+        $valuesExist = count($values) > 0;
         $fieldName   = self::getFieldName($args['option_name'], $name);
         $size        = self::getSize($args['size']);
 
@@ -614,8 +615,7 @@ class Metafield {
 
                 <div class="gallery-frame" id="<?php echo $name; ?>">
                     <ul>
-                        <?php if ( ! empty($values) ) : ?>
-
+                        <?php if ( $valuesExist ) : ?>
                             <?php foreach ($values as $item): ?>
                                 <li>
                                     <div class="gallery-image-wrapper">
@@ -625,10 +625,12 @@ class Metafield {
                             <?php endforeach ?>
                         <?php endif; ?>
                     </ul>
-
-                    <a href="#" class="button-add"><?php echo __('Select images') ?></a>
                 </div>
             </div>
+
+            <a href="#" class="button-add"><?php echo __('Select images') ?></a>
+            <a href="#" class="button-remove <?php echo $valuesExist ? '' : 'hidden'; ?>"><?php echo __('Remove images') ?></a>
+
             <textarea class="textarea-hidden" name="<?php echo $fieldName; ?>" id="<?php echo $fieldName; ?>"><?php echo $value; ?></textarea>
 
             <?php self::createDescription($args['description']); ?>

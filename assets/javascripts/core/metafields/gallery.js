@@ -19,6 +19,7 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         $galleryWrapper = $component.find('.gallery-wrapper'),
         $valStorage     = $component.find('textarea'),
         $btnAddImg      = $component.find('.button-add'),
+        $btnRemove      = $component.find('.button-remove'),
         $galleryImg     = $component.find('.gallery-image-wrapper'),
         sly             = null,
         settings      = ECF_Settings;
@@ -41,10 +42,10 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
 
         // enable sliders
         var enableSliders = function() {
-            var $sliders = $('.gallery-frame');
+            var $sliders = $galleryWrapper.find('.gallery-frame');
 
             for (var i = 0, j = $sliders.length; i < j; i++) {
-                var id = $sliders.eq(i).attr('id');
+                var id = $sliders.eq(i).attr('class');
 
                 // initialize slider
                 initSlider(id);
@@ -54,7 +55,7 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         var initSlider = function(id) {
 
             // Call Sly on frame
-            sly = new Sly('#' + id, {
+            sly = new Sly('.' + id, {
                 horizontal: 1,
                 itemNav: 'basic',
                 smart: 1,
@@ -80,7 +81,12 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         };
 
         var reloadSliders = function() {
-            var $sliders = $('.gallery-frame');
+            var $sliders = $galleryWrapper.find('.gallery-frame');
+
+            if ( galleries.length === 0 ) {
+                enableSliders();
+                return;
+            }
 
             for (var i = 0, l = $sliders.length; i < l; i++) {
                 galleries[i].slider.destroy();
@@ -93,7 +99,7 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         var increaseSliderWidth = function() {
 
             // Get sliders
-            var $sliders = $('.gallery-frame');
+            var $sliders = $galleryWrapper.find('.gallery-frame');
 
             // Set offset for the slider width
             var offset = 200;
@@ -178,7 +184,7 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
 
         $galleryWrapper.hide();
 
-        $galleryWrapper.empty();
+        $galleryWrapper.find('.gallery-frame').empty();
 
         var $html = '<div class="gallery-frame"><ul>';
 
@@ -190,6 +196,8 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
         $html += '</ul></div>';
 
         $galleryWrapper.append($html);
+
+        $btnRemove.removeClass('hidden');
 
         // initialize the new gallery
         init();
@@ -233,5 +241,13 @@ KenobiSoft.metafields.gallery = KenobiSoft.metafields.gallery || function($compo
 
         // Opens the media library frame.
         meta_image_frame.open();
+    });
+
+    $btnRemove.click(function(e){
+        e.preventDefault();
+
+        $galleryWrapper.find('.gallery-frame').find('ul').empty();
+        $valStorage.html('');
+        $btnRemove.addClass('hidden');
     });
 };

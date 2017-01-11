@@ -48,7 +48,7 @@ input[type="button"] {
   margin-bottom: 3px;
 }
 
-.button-add.hidden {
+.button-add.hidden, .button-remove.hidden, .button-open.hidden {
   display: none;
 }
 
@@ -63,6 +63,10 @@ input[type="button"] {
     overflow: hidden;
     height: 42px;
     width: 42px;
+  }
+
+  @include breakpoint($breakpoint-sm) {
+    margin-right: 0px;
   }
 }
 

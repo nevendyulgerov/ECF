@@ -71,6 +71,8 @@ KenobiSoft.metafields.file = KenobiSoft.metafields.file || function($component) 
             // clear data for metafield
             $metafield.val('');
 
+            console.log($buttonOpen);
+
             // toggle buttons
             $buttonOpen.addClass('hidden');
             $buttonRemove.addClass('hidden');

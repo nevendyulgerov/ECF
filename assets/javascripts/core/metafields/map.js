@@ -32,8 +32,6 @@ KenobiSoft.metafields.map = KenobiSoft.metafields.map || function($component) {
     // define init function
     var init = function() {
 
-        console.log(mapDiv);
-
         var map = new google.maps.Map(mapDiv, {
             center: {
                 lat: lat,

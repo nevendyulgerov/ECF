@@ -28,9 +28,13 @@
 
 .term-php {
   .custom-metafield {
-    width: 92% !important;
+    width: 95% !important;
     background-color: white;
     padding: 20px 20px 20px 20px;
+
+    @include breakpoint($breakpoint-md) {
+      width: 92% !important;
+    }
   }
 
   .custom-metafield[data-metafield="map"] {
@@ -238,6 +242,13 @@
     &:hover {
       cursor: pointer;
     }
+  }
+}
+
+.custom-metafield[data-metafield="image"] {
+  img {
+    display: block;
+    margin-bottom: 3px;
   }
 }
 
@@ -518,6 +529,10 @@
   display: none;
 }
 
+.hidden {
+  display: none!important;
+}
+
 .view-block {
   margin: 0px 0px 20px 0px;
   clear: both;
@@ -533,7 +548,7 @@
 }
 
 .textarea-hidden {
-  display: none;
+  display: none !important;
 }
 
 .highlighted {

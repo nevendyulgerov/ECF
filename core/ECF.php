@@ -13,23 +13,23 @@ class ECF {
 
     /**
      * Get field
-     * @param $args
+     * @param $fieldName
+     * @param fieldType
+     * @param $id
      * @return null
      */
-    public static function get($args) {
+    public static function get($fieldName, $fieldType, $id = null) {
         $fieldData = null;
-        $field = $args['field'];
-        $type  = $args['type'];
 
-        switch ( $type ) {
+        switch ( $fieldType ) {
             case 'opt':
-                $fieldData = self::getOptionField($field);
+                $fieldData = self::getOptionField($fieldName);
                 break;
             case 'cpt':
-                $fieldData = self::getCptField($field, $args['post_id']);
+                $fieldData = self::getCptField($fieldName, $id);
                 break;
             case 'tax':
-                $fieldData = self::getTaxField($field, $args['term_id']);
+                $fieldData = self::getTaxField($fieldName, $id);
                 break;
             default:
                 break;
