@@ -97,6 +97,7 @@ class CustomTaxField {
     public function addCustomMetafields($term, $taxName, $metafields) {
         $termId  = $term->term_id;
         $taxMeta = get_option("taxonomy_$termId");
+        $view    = new View($this->moduleConfig, $this->config);
 
         if ( count($metafields) > 0 ) {
             foreach ( $metafields as $metafieldsArr ) {
@@ -107,6 +108,11 @@ class CustomTaxField {
                 if ( $hasMultiplePostTypes ) {
                     foreach( $metafieldsArr as $metafield ) {
 
+                        // set data, if metafield is 'dropdown_single' or 'dropdown_multiple'
+                        if ( $metafield['type'] === 'dropdown_single' || $metafield['type'] === 'dropdown_multiple' ) {
+                            $metafield['data'] = $view->getDropdownData($metafield);
+                        }
+
                         // update field value
                         $metafield['value'] = $taxMeta[$metafield['name']];
 
@@ -114,12 +120,17 @@ class CustomTaxField {
                         $metafield['name'] = $taxName . '[' . $metafield['name'] . ']';
 
                         // set module data
-                        $metafield['module'] = (array) $this->moduleConfig->module;
+                        $metafield['module'] = $this->moduleConfig['module'];
 
                         // create custom metafield
                         $this->createCustomMetafield($metafield);
                     }
                 } else {
+
+                    // set data, if metafield is 'dropdown_single' or 'dropdown_multiple'
+                    if ( $metafield['type'] === 'dropdown_single' || $metafield['type'] === 'dropdown_multiple' ) {
+                        $metafield['data'] = $view->getDropdownData($metafield);
+                    }
 
                     // update field value
                     $metafield['value'] = $taxMeta[$metafield['name']];
@@ -128,7 +139,7 @@ class CustomTaxField {
                     $metafield['name'] = $taxName . '[' . $metafield['name'] . ']';
 
                     // set module data
-                    $metafield['module'] = (array) $this->moduleConfig->module;
+                    $metafield['module'] = $this->moduleConfig['module'];
 
                     // create custom metafield
                     $this->createCustomMetafield($metafield);

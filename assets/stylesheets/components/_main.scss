@@ -26,6 +26,21 @@
   }
 }
 
+.term-php {
+  .custom-metafield {
+    width: 92% !important;
+    background-color: white;
+    padding: 20px 20px 20px 20px;
+  }
+
+  .custom-metafield[data-metafield="map"] {
+    .map-controls {
+      left: -164px;
+    }
+  }
+}
+
+
 .col-full {
   padding-left: 0px !important;
   padding-right: 0px !important;

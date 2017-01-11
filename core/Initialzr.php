@@ -106,8 +106,8 @@ class Initialzr {
 
         $this->view   	       = new View($this->moduleConfig, $this->fieldsConfig);
         self::$collection      = new Collection($this->moduleConfig['module']['collection']);
-        $this->customPostField = new CustomPostField($moduleConfig, $this->fieldsConfig['postTypes']);
-        $this->customTaxField  = new CustomTaxField($moduleConfig, $this->fieldsConfig['taxonomies']);
+        $this->customPostField = new CustomPostField($this->moduleConfig, $this->fieldsConfig['postTypes']);
+        $this->customTaxField  = new CustomTaxField($this->moduleConfig, $this->fieldsConfig['taxonomies']);
 
         // setup app and monitor for changes
         $this->setup();
@@ -119,6 +119,8 @@ class Initialzr {
      * Setup
      */
     protected function setup() {
+        $module          = $this->moduleConfig['module'];
+        $moduleSettings  = $this->fieldsConfig['moduleSettings'];
 
         // register collection space
         add_action('admin_init', function() {
@@ -126,14 +128,12 @@ class Initialzr {
         });
 
         // add plugin backend page
-        add_action('admin_menu', function() {
-            $module = $this->moduleConfig['module'];
+        add_action('admin_menu', function() use ($module) {
             add_menu_page($module['name'], $module['menuName'], 'manage_options', $module['dir'], array($this, 'getBackend'), $this->fieldsConfig['themeOptions']['settings']['menuIcon']);
         });
 
         // enqueue plugin resources
-        add_action('admin_enqueue_scripts', function() {
-            $module    = $this->moduleConfig['module'];
+        add_action('admin_enqueue_scripts', function() use ($module, $moduleSettings) {
             $scriptExt = $module['mode'] === 'production' ? '.min.js' : '.js';
 
             wp_enqueue_media();
@@ -146,7 +146,7 @@ class Initialzr {
             ));
 
             // get google maps script url
-            $googleMapsApiKey = $this->fieldsConfig['googleMapsApiKey'];
+            $googleMapsApiKey    = $moduleSettings['googleMapsApiKey'];
             $googleMapsScriptUrl =
                 is_string($googleMapsApiKey) && !empty($googleMapsApiKey) ?
                     'https://maps.googleapis.com/maps/api/js?key=' . $googleMapsApiKey : 'http://maps.googleapis.com/maps/api/js?sensor=false';

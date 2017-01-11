@@ -13399,15 +13399,17 @@ KenobiSoft.metafields.default = KenobiSoft.metafields.default || function ($comp
         window.location.href = $(this).find('a').attr('href');
     });
 
-    // highlight wysiwyg on click
-    $('.custom-metafield[data-metafield="editor"]').on('click', function () {
-        var $box = $(this).find('.trumbowyg-box');
+    var enableEditorHighlight = function () {
+        // highlight wysiwyg on click
+        $('.custom-metafield[data-metafield="editor"]').on('click', function () {
+            var $box = $(this).find('.trumbowyg-box');
 
-        if (!$box.hasClass('active')) {
-            $box.addClass('active');
-            $('.trumbowyg-box').not($box).removeClass('active');
-        }
-    });
+            if (!$box.hasClass('active')) {
+                $box.addClass('active');
+                $('.trumbowyg-box').not($box).removeClass('active');
+            }
+        });
+    };
 };
 ;
 

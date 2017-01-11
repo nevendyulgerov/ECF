@@ -111,6 +111,7 @@ class CustomPostField {
      * @param $metafields
      */
     protected function __createFields($postId, $metafields) {
+        $view = new View($this->moduleConfig, $this->config);
 
         if ( is_array($metafields) && count($metafields) > 0 ) {
             foreach ( $metafields as $metafield ) {
@@ -118,11 +119,16 @@ class CustomPostField {
 
                 if ( isset($metafieldName) && !empty($metafieldName) ) {
 
+                    // set data, if metafield is 'dropdown_single' or 'dropdown_multiple'
+                    if ( $metafield['type'] === 'dropdown_single' || $metafield['type'] === 'dropdown_multiple' ) {
+                        $metafield['data'] = $view->getDropdownData($metafield);
+                    }
+
                     // set metafield value
                     $metafield['value']  = get_post_meta($postId, $metafieldName, true);
 
                     // set module data
-                    $metafield['module'] = (array) $this->moduleConfig->module;
+                    $metafield['module'] = $this->moduleConfig['module'];
 
                     // create field
                     Metafield::createField($metafield);
@@ -135,11 +141,16 @@ class CustomPostField {
                         foreach ( $actualMetafields as $actualMetafield ) {
                             $actualMetafieldName = $actualMetafield['name'];
 
+                            // set data, if metafield is 'dropdown_single' or 'dropdown_multiple'
+                            if ( $actualMetafield['type'] === 'dropdown_single' || $actualMetafield['type'] === 'dropdown_multiple' ) {
+                                $actualMetafield['data'] = $view->getDropdownData($actualMetafield);
+                            }
+
                             // set metafield value
                             $actualMetafield['value'] = get_post_meta($postId, $actualMetafieldName, true);
 
                             // set module data
-                            $actualMetafield['module'] = (array) $this->moduleConfig->module;
+                            $actualMetafield['module'] = $this->moduleConfig['module'];
 
                             // create field
                             Metafield::createField($actualMetafield);

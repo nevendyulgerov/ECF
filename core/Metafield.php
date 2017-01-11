@@ -549,7 +549,7 @@ class Metafield {
                     $heading = isset($field['h']) ? $field['h'] : null;
                     $text = isset($field['p']) ? $field['p'] : null;
                     $link = isset($field['link']) ? $field['link'] : null;
-                    $link_text = isset($field['link_text']) ? $field['link_text'] : null;
+                    $link_text = isset($field['linkText']) ? $field['linkText'] : null;
                     $ribbon = isset($field['ribbon']) ? $field['ribbon'] : null;
 
                     if ( $heading ) {

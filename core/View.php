@@ -542,7 +542,7 @@ class View {
      * @param array $args
      * @return array
      */
-    protected function getDropdownData($args) {
+    public function getDropdownData($args) {
         $dataType    = isset($args['dataType']) && is_string($args['dataType']) ? $args['dataType'] : 'custom';
         $dataExists  = isset($args['data']) && !empty($args['data']);
         $dataArr     = array();
@@ -636,7 +636,7 @@ class View {
             Metafield::createField(array(
                 'type'        => 'hidden',
                 'name'        => $name,
-                'value'       => stripslashes($value),
+                'value'       => $value,
                 'option_name' => $optionName
             ));
         }
