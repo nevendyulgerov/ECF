@@ -128,8 +128,8 @@ class Initialzr {
         });
 
         // add plugin backend page
-        add_action('admin_menu', function() use ($module) {
-            add_menu_page($module['name'], $module['menuName'], 'manage_options', $module['dir'], array($this, 'getBackend'), $this->fieldsConfig['themeOptions']['settings']['menuIcon']);
+        add_action('admin_menu', function() use ($module, $moduleSettings) {
+            add_menu_page($module['name'], $this->fieldsConfig['themeOptions']['settings']['name'], 'manage_options', $module['dir'], array($this, 'getBackend'), $this->fieldsConfig['themeOptions']['settings']['icon']);
         });
 
         // enqueue plugin resources

@@ -2,11 +2,10 @@
 <config>
 	<module>
 		<name>Enhanced Custom Fields</name>
-        <menuName>Theme Options</menuName>
 		<version>1.0.0</version>
 		<author>KenobiSoft</author>
 		<dir>ecf</dir>
-        <mode>development</mode>
+        <mode>production</mode>
         <collection>
             <optionGroup>sa_theme_options</optionGroup>
             <optionName>sa_options</optionName>
