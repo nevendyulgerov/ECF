@@ -229,7 +229,7 @@ As seen previously, the options page contains two pages, first of which is the D
 
     - activity   (provides information about user activity)
     - statistics (provides information about post activity)
-    - plugins    (provides information about installed plugins
+    - plugins    (provides information about installed plugins)
     
 Let's look at the 'widgets' node:
 
@@ -295,7 +295,7 @@ You can easily configure ECF to work for custom post types, by using the 'postTy
 </postTypes>
 ```
 
-In the example above, we define a custom metafield of type 'number' for custom post type 'post'.
+In the example above, we define a custom metafield of type 'number' for custom post type 'page'.
 
 #How to configure Enhanced Custom Fields for Taxonomies
 
@@ -323,12 +323,13 @@ In the example above, we define a custom metafield of type 'number' for taxonomy
 
 ECF comes with a ready-to-use public class, called ECF, which exposes public static methods for
 
-    - getting ecf data
-    - checking if ecf data exists
+    - getting ECF data
+    - checking if ECF data exists
  
 Here's an en example of getting an ECF field, attached to a custom post type.
 
 ```php
+// use class ECF from namespace ECF
 use ECF\ECF;
 global $post;
 $fieldVal = null;
@@ -345,6 +346,7 @@ if ( ECF::has('myField', 'cpt', $post->ID) ) {
 Here's an en example of getting an ECF field, attached to a taxonomy.
 
 ```php
+// use class ECF from namespace ECF
 use ECF\ECF;
 $provider = get_term($someTermID, 'providers');
 $fieldVal = null;
@@ -361,6 +363,7 @@ if ( ECF::has('myField', 'tax', $provider->term_id) ) {
 Getting a field value from the options page is even easier. Here's an example:
 
 ```php
+// use class ECF from namespace ECF
 use ECF\ECF;
 $fieldVal = null;
 
