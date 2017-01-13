@@ -6,6 +6,24 @@ class ECF {
 
 
     /**
+     * @property array $fieldTypes
+     */
+    protected static $fieldTypes = array(
+        'opt' => 'option',
+        'cpt' => 'customPostType',
+        'tax' => 'taxonomy'
+    );
+
+
+    /**
+     * @property array $messages
+     */
+    protected static $messages = array(
+        'invalidFieldType' => 'Invalid field type provided for method [{method}] of class [ECF]. Supported field types are: \'opt\', \'cpt\' and \'tax\'.'
+    );
+
+
+    /**
      * Construct
      */
     public function __construct() {}
@@ -20,10 +38,17 @@ class ECF {
      */
     public static function get($fieldName, $fieldType, $id = null) {
         $fieldData = null;
+        $fieldTypes = self::$fieldTypes;
+
+        // check if field type exists
+        if ( ! isset($fieldTypes[$fieldType]) ) {
+            Notifier::notify(str_replace('{method}', 'get', self::$messages['invalidFieldType']));
+            return false;
+        }
 
         switch ( $fieldType ) {
             case 'opt':
-                $fieldData = self::getOptionField($fieldName);
+                $fieldData = self::getOptField($fieldName);
                 break;
             case 'cpt':
                 $fieldData = self::getCptField($fieldName, $id);
@@ -44,11 +69,11 @@ class ECF {
      * @param $field
      * @return string
      */
-    protected static function getOptionField($field) {
-        $fields = self::getFields();
-        $property     = null;
+    protected static function getOptField($field) {
+        $fields   = self::getFields();
+        $property = null;
 
-        if ( self::has($field) ) {
+        if ( self::has($field, 'opt') ) {
             $property = $fields[$field];
         }
 
@@ -63,7 +88,7 @@ class ECF {
      * @return mixed
      */
     protected static function getCptField($field, $postId) {
-        return Collection::getCustomPostField($field, $postId);
+        return self::sanitizeField(Collection::getCustomPostField($field, $postId));
     }
 
 
@@ -74,27 +99,84 @@ class ECF {
      * @return mixed
      */
     protected static function getTaxField($field, $termId) {
-        return Collection::getCustomTaxField($field, $termId);
+        return self::sanitizeField(Collection::getCustomTaxField($field, $termId));
     }
 
 
     /**
      * Has field
-     * @param $field
+     * @param $fieldName
+     * @param $fieldType
+     * @param $id
      * @return bool
      */
-    public static function has($field) {
-        $fields = self::getFields();
+    public static function has($fieldName, $fieldType, $id = null) {
+        $exists = false;
+        $fieldTypes = self::$fieldTypes;
 
-        return isset($fields[$field]) && !empty($fields[$field]);
+        // check if field type exists
+        if ( !isset($fieldTypes[$fieldType]) ) {
+            Notifier::notify(str_replace('{method}', 'has', self::$messages['invalidFieldType']));
+            return false;
+        }
+
+        switch ( $fieldType ) {
+            case 'opt':
+                $exists = self::hasOptField($fieldName);
+                break;
+            case 'cpt':
+                $exists = self::hasCptField($fieldName, $id);
+                break;
+            case 'tax':
+                $exists = self::hasTaxField($fieldName, $id);
+                break;
+            default:
+                break;
+        }
+
+        return $exists;
     }
 
+
+    /**
+     * Has opt field
+     * @param $fieldName
+     * @return bool
+     */
+    private static function hasOptField($fieldName) {
+        $fields = self::getFields();
+        return self::exists($fields[$fieldName]);
+    }
+
+
+    /**
+     * Has cpt field
+     * @param $fieldName
+     * @param $postId
+     * @return bool
+     */
+    private static function hasCptField($fieldName, $postId) {
+        $field = self::getCptField($fieldName, $postId);
+        return self::exists($field);
+    }
+
+
+    /**
+     * Has tax field
+     * @param $fieldName
+     * @param $termId
+     * @return bool
+     */
+    private static function hasTaxField($fieldName, $termId) {
+        $field = self::getTaxField($fieldName, $termId);
+        return self::exists($field);
+    }
 
     /**
      * Get all fields
      * @return mixed|void
      */
-    public static function getAll() {
+    public static function getAllOptFields() {
         $fields          = self::getFields();
         $sanitizedFields = self::sanitizeFields($fields);
 
@@ -137,4 +219,15 @@ class ECF {
 
         return $sanitizedFields;
     }
+
+
+    /**
+     * Exists
+     * @param $field
+     * @return bool
+     */
+    private static function exists($field) {
+        return isset($field) && !empty($field);
+    }
+
 }
