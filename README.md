@@ -334,7 +334,7 @@ use ECF\ECF;
 global $post;
 $fieldVal = null;
 
-// check if field with name 'myField' for custom post type with id exists
+// check if field with name 'myField' for custom post type exists
 if ( ECF::has('myField', 'cpt', $post->ID) ) {
 
     // retrieve value for field with name 'myField'
@@ -376,4 +376,26 @@ if ( ECF::has('myField', 'opt') ) {
 
 ```
 
-All returned values from the methods of ECF class sanitize the values, using stripslashes function.
+Class ECF currently has 2 public methods:
+
+```php
+
+/**
+ * ECF::has method
+ * @param string fieldName
+ * @param string type
+ * @param int    $id
+ * @return boolean
+ */ 
+
+/**
+ * ECF::get method
+ * @param string fieldName
+ * @param string type
+ * @param int    $id
+ * @return mixed
+ */
+ 
+```
+
+All returned values from the get method of ECF class are sanitized with the stripslashes function.
