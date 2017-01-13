@@ -11,9 +11,6 @@ Define your custom fields and watch them work perfectly without any extra work o
 
 With ECF, you can define a total of 13 different metafields:
 
-    can be text, email, hidden, number, checkbox, date, file, image, textarea, dropdown_single, dropdown_multiple, editor, map, gallery, plain_text)
-    
-    
     - text field        (text)
     - number field      (number)
     - email field       (email)
