@@ -382,17 +382,17 @@ Class ECF currently has 2 public methods:
 
 /**
  * ECF::has method
- * @param string fieldName
- * @param string type
- * @param int    $id
+ * @param string $fieldName
+ * @param string $type
+ * @param int    $id (optional)
  * @return boolean
  */ 
 
 /**
  * ECF::get method
- * @param string fieldName
- * @param string type
- * @param int    $id
+ * @param string $fieldName
+ * @param string $type
+ * @param int    $id (optional)
  * @return mixed
  */
  
