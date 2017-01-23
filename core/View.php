@@ -404,7 +404,11 @@ class View {
      * @return bool
      */
     public function isUpdated() {
-        return $this->helper->postParamExist('action') && $_POST['action'] === self::$moduleConfig['module']['params']['update'];
+        return
+            $this->helper->postParamExist('action') &&
+            $this->helper->getParamExist('page') &&
+            $_POST['action'] === self::$moduleConfig['module']['params']['update'] &&
+            $_GET['page'] === self::$moduleConfig['module']['dir'];
     }
 
 
