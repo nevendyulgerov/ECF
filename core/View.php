@@ -74,7 +74,7 @@ class View {
      * Monitor view
      */
     protected function monitorView() {
-        $name = self::$moduleConfig['module']['menuName'];
+        $name = self::$fieldsConfig['themeOptions']['settings']['name'];
 
         if ( $this->isUpdated() ) {
 
