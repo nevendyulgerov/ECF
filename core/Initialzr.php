@@ -134,13 +134,12 @@ class Initialzr {
 
         // enqueue plugin resources
         add_action('admin_enqueue_scripts', function() use ($module, $moduleSettings) {
-            $scriptExt = $module['mode'] === 'production' ? '.min.js' : '.js';
 
             wp_enqueue_media();
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-datepicker');
             wp_enqueue_style($module['dir'], get_stylesheet_directory_uri() . '/modules/' . $module['dir'] . '/assets/stylesheets/style.css');
-            wp_enqueue_script($module['dir'], get_stylesheet_directory_uri() . '/modules/' . $module['dir'] . '/assets/javascripts/main' . $scriptExt, array('jquery'));
+            wp_enqueue_script($module['dir'], get_stylesheet_directory_uri() . '/modules/' . $module['dir'] . '/assets/javascripts/main.js', array('jquery'));
             wp_localize_script($module['dir'], 'ECF_Settings', array(
                 'site_url' => get_site_url()
             ));
