@@ -38,11 +38,21 @@ class Helper {
 
 
     /**
-     * Post param exists
+     * POST param exists
      * @param $param
      * @return bool
      */
     public function postParamExist($param) {
         return !empty($_POST) && isset($_POST[$param]) && !empty($_POST[$param]);
+    }
+
+
+    /**
+     * GET param exists
+     * @param $param
+     * @return bool
+     */
+    public function getParamExist($param) {
+        return !empty($_GET) && isset($_GET[$param]) && !empty($_GET[$param]);
     }
 }
