@@ -5,7 +5,6 @@
 		<version>1.0.0</version>
 		<author>KenobiSoft</author>
 		<dir>ecf</dir>
-        <mode>production</mode>
         <collection>
             <optionGroup>sa_theme_options</optionGroup>
             <optionName>sa_options</optionName>
